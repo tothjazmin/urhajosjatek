@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space-Shippers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: "Orbitron", sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        canvas {
+            display: block;
+            background: radial-gradient(circle, #1a1a1a, #000);
+            border: 3px solid cyan;
+            box-shadow: 0 0 15px cyan;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px cyan;
+        }
+
+            .controls p {
+                margin: 5px 0;
+            }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(255, 65, 108, 0.8);
+        }
+
+            button:hover {
+                background: linear-gradient(90deg, #ff4b2b, #ff416c);
+                box-shadow: 0 0 12px rgba(255, 75, 43, 0.8);
+            }
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            color: cyan;
+            display: none;
+            text-shadow: 0 0 10px cyan;
+        }
+
+        #restartButton {
+            display: none;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(255, 65, 108, 0.8);
+        }
+
+            #restartButton:hover {
+                background: linear-gradient(90deg, #ff4b2b, #ff416c);
+                box-shadow: 0 0 15px rgba(255, 75, 43, 0.8);
+            }
+
+        .disabled {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .skin-container {
+            position: absolute;
+            top: 100px;
+            right: 10px;
+            color: white;
+        }
+
+        .skin {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid white;
+            text-align: center;
+        }
+
+        .skin-button {
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #333;
+            color: white;
+            border: 1px solid white;
+            cursor: pointer;
+        }
+
+            .skin-button:hover {
+                background-color: #555;
+            }
+
+        .active {
+            background-color: green;
+        }
+
+        .inactive {
+            background-color: red;
+        }
+
+        .controls-description {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px cyan;
+            font-size: 27.9px;
+        }
+
+        #intro {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: cyan;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 100;
+            font-size: 24px;
+            text-shadow: 0 0 10px cyan;
+        }
+
+        .character-select {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px cyan;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+            .character-select img {
+                width: 50px;
+                height: 50px;
+                margin: 5px;
+                cursor: pointer;
+                border: 2px solid transparent;
+            }
+
+                .character-select img.selected {
+                    border-color: cyan;
+                }
+
+        #shop {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px cyan;
+            display: none;
+        }
+
+            #shop.show {
+                display: block;
+            }
+
+            #shop button {
+                display: block;
+                margin: 5px 0;
+            }
+
+        #openShopButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 101;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls-description">
+        <h3>Irányítás</h3>
+        <p><strong>Felfelé:</strong>(↑) vagy W</p>
+        <p><strong>Lefelé:</strong>(↓) vagy S</p>
+        <p><strong>Balra:</strong>(←) vagy A</p>
+        <p><strong>Jobbra:</strong>(→) vagy D</p>
+        <p><strong>Lövés:</strong> Space</p>
+        <p><strong>Pajzs aktiválása:</strong> F</p>
+    </div>
+
+    <div class="controls">
+        <button id="upgradeShield">Pajzs fejlesztése (20 pénz)</button>
+        <button id="upgradeDamage">Lövés fejlesztése (20 pénz)</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="message" id="messageBox"></div>
+    <button id="restartButton">Új játék</button>
+
+    <div class="skin-container">
+        <div class="skin">
+            <h3>Skin 1000 pénz</h3>
+            <div id="skin1Status">Zárva</div>
+            <button id="buySkin1" class="skin-button">Vásárlás (1000 pénz)</button>
+            <button id="toggleSkin1" class="skin-button" style="display:none;">Hozzáad</button>
+        </div>
+        <div class="skin">
+            <h3>Skin 2000 pénz</h3>
+            <div id="skin2Status">Zárva</div>
+            <button id="buySkin2" class="skin-button">Vásárlás (2000 pénz)</button>
+            <button id="toggleSkin2" class="skin-button" style="display:none;">Hozzáad</button>
+        </div>
+    </div>
+
+    <div id="intro">
+        <h1>Üdvözöllek a Space-Shippers játékban!</h1>
+        <p>A Kryll invázió a Földet fenyegeti. Válassz űrhajót, fejleszd, és mentsd meg a bolygót!.</p>
+    </div>
+
+    <div class="character-select">
+        <img src="urhajo1.png" data-skin="urhajo1" class="selected">
+        <img src="urhajo2.png" data-skin="urhajo2">
+        <img src="urhajo3.png" data-skin="urhajo3">
+    </div>
+
+    <button id="openShopButton">Bolt</button>
+
+    <div id="shop">
+        <button id="buyRapidFire">Gyors Tűz (150 pénz)</button>
+        <button id="buyExtraLife">Extra Élet (200 pénz)</button>
+        <button id="buyHomingMissiles">Célkövető Rakéták (300 pénz)</button>
+        <button id="buyShieldBoost">Pajzs Erősítés (250 pénz)</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 600;
+        canvas.height = 800;
+
+        const images = {};
+        function loadImages() {
+            images.spaceship = new Image();
+            images.spaceship.src = 'spaceship.png';
+
+            images.spaceship1 = new Image();
+            images.spaceship1.src = 'spaceship1.png';
+
+            images.hellokitty = new Image();
+            images.hellokitty.src = 'hellokitty.png';
+
+            images.enemyRed = new Image();
+            images.enemyRed.src = 'enemy_red.png';
+
+            images.enemyBlue = new Image();
+            images.enemyBlue.src = 'enemy_blue.png';
+
+            images.enemyGreen = new Image();
+            images.enemyGreen.src = 'enemy_green.png';
+
+            images.enemyPurple = new Image();
+            images.enemyPurple.src = 'enemy_purple.png';
+
+            images.boss = new Image();
+            images.boss.src = 'BOSS.png';
+
+            images.urhajo1 = new Image();
+            images.urhajo1.src = 'urhajo1.png';
+
+            images.urhajo2 = new Image();
+            images.urhajo2.src = 'urhajo2.png';
+
+            images.urhajo3 = new Image();
+            images.urhajo3.src = 'urhajo3.png';
+        }
+
+        loadImages();
+
+        let spaceship = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 100,
+            width: 50,
+            height: 50,
+            speed: 7,
+            shieldLevel: 1,
+            shieldActive: false,
+            damageLevel: 1,
+            shieldCooldown: false,
+            canShoot: true,
+            currentSkin: 'urhajo1'
+        };
+
+        let bullets = [];
+        let enemies = [];
+        let boss = null;
+        let bossBullets = [];
+        let enemyRedBullets = [];
+        let enemyTypes = [
+            { image: 'enemyRed', speed: 2, health: 1, reward: 5 },
+            { image: 'enemyBlue', speed: 3, health: 2, reward: 7 },
+            { image: 'enemyGreen', speed: 1.5, health: 3, reward: 9 },
+            { image: 'enemyPurple', speed: 4, health: 4, reward: 12 }
+        ];
+        let lastEnemySpawn = 0;
+        let enemySpawnInterval = 1500;
+        let score = 0;
+        let coins = 0;
+
+        const shieldDurations = [0, 5000, 10000, 30000];
+
+        const keys = {
+            up: false,
+            down: false,
+            left: false,
+            right: false,
+            shoot: false
+        };
+
+        let bossSpawned = false;
+        let bossType = 0;
+        let firstBossDefeated = false;
+        let gameRunning = true;
+
+        function drawSpaceship() {
+            ctx.drawImage(images[spaceship.currentSkin], spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+
+            if (spaceship.shieldActive) {
+                ctx.beginPath();
+                ctx.arc(
+                    spaceship.x + spaceship.width / 2,
+                    spaceship.y + spaceship.height / 2,
+                    40,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.strokeStyle = 'cyan';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+        }
+
+        function getBulletColor(level) {
+            switch (level) {
+                case 1: return 'yellow';
+                case 2: return 'purple';
+                case 3: return 'green';
+                case 4: return 'red';
+                default: return 'yellow';
+            }
+        }
+
+        function drawBullets() {
+            bullets.forEach(bullet => {
+                ctx.fillStyle = getBulletColor(spaceship.damageLevel);
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+            bossBullets.forEach(bullet => {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+            enemyRedBullets.forEach(bullet => {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+        }
+
+        function drawEnemies() {
+            enemies.forEach(enemy => {
+                ctx.drawImage(images[enemy.image], enemy.x, enemy.y, 30, 30);
+            });
+        }
+
+        function drawBoss() {
+            if (boss) {
+                ctx.drawImage(images.boss, boss.x, boss.y, boss.width, boss.height);
+                ctx.fillStyle = 'white';
+                ctx.fillText(`HP: ${boss.health}`, boss.x, boss.y - 5);
+            }
+        }
+
+        function updateBullets() {
+            bullets.forEach((bullet, index) => {
+                bullet.y -= bullet.speed;
+                if (bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+
+            bossBullets.forEach((bullet, index) => {
+                bullet.y += bullet.speed;
+                if (bullet.y > canvas.height) {
+                    bossBullets.splice(index, 1);
+                }
+            });
+
+            enemyRedBullets.forEach((bullet, index) => {
+                bullet.y += bullet.speed;
+                if (bullet.y > canvas.height) {
+                    enemyRedBullets.splice(index, 1);
+                }
+            });
+        }
+
+        function enemyRedShoot(enemy) {
+            enemyRedBullets.push({
+                x: enemy.x + 12.5,
+                y: enemy.y + 30,
+                width: 5,
+                height: 10,
+                speed: 5
+            });
+        }
+
+        function updateEnemies() {
+            if (Date.now() - lastEnemySpawn > enemySpawnInterval) {
+                let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+                let newEnemy = {
+                    x: Math.random() * (canvas.width - 30),
+                    y: -30,
+                    health: type.health,
+                    image: type.image,
+                    reward: type.reward,
+                    speedX: Math.random() > 0.5 ? type.speed : -type.speed,
+                    speedY: type.speed
+                };
+                enemies.push(newEnemy);
+                lastEnemySpawn = Date.now();
+            }
+
+            enemies.forEach((enemy, index) => {
+                enemy.x += enemy.speedX;
+                enemy.y += enemy.speedY;
+                if (enemy.x < 0 || enemy.x > canvas.width - 30) enemy.speedX *= -1;
+                if (enemy.y > canvas.height) enemies.splice(index, 1);
+
+                if (enemy.image === 'enemyRed' && Date.now() % 2000 < 50) {
+                    enemyRedShoot(enemy);
+                }
+            });
+        }
+
+        function spawnBoss() {
+            if (bossSpawned) return;
+
+            let bossHealth;
+            if (bossType === 0) {
+                bossHealth = 200;
+            } else if (bossType === 1) {
+                bossHealth = 400;
+            } else if (bossType === 2) {
+                bossHealth = 600;
+            }
+
+            boss = {
+                x: canvas.width / 2 - 25,
+                y: 50,
+                width: 100,
+                height: 100,
+                health: bossHealth,
+                speed: 2
+            };
+
+            bossSpawned = true;
+        }
+
+        function updateBoss() {
+            if (boss) {
+                boss.x += boss.speed;
+                if (boss.x <= 0 || boss.x >= canvas.width - boss.width) {
+                    boss.speed *= -1;
+                }
+            }
+        }
+
+        function bossShoot() {
+            if (boss) {
+                bossBullets.push({
+                    x: boss.x + boss.width / 2 - 2.5,
+                    y: boss.y + boss.height,
+                    width: 5,
+                    height: 10,
+                    speed: 5
+                });
+            }
+        }
+
+        function checkCollisions() {
+            enemies.forEach((enemy, eIndex) => {
+                bullets.forEach((bullet, bIndex) => {
+                    if (
+                        bullet.x < enemy.x + 30 &&
+                        bullet.x + bullet.width > enemy.x &&
+                        bullet.y < enemy.y + 30 &&
+                        bullet.y + bullet.height > enemy.y
+                    ) {
+                        enemy.health -= spaceship.damageLevel;
+                        bullets.splice(bIndex, 1);
+
+                        if (enemy.health <= 0) {
+                            enemies.splice(eIndex, 1);
+                            coins += enemy.reward;
+                            score += 10;
+                        }
+                    }
+                });
+
+                if (
+                    spaceship.x < enemy.x + 30 &&
+                    spaceship.x + spaceship.width > enemy.x &&
+                    spaceship.y < enemy.y + 30 &&
+                    spaceship.y + spaceship.height > enemy.y
+                ) {
+                    enemies.splice(eIndex, 1);
+                    if (!spaceship.shieldActive) {
+                        showMessage(`Vesztettél! Pont: ${score}`);
+                        gameRunning = false;
+                        document.getElementById('restartButton').style.display = 'block';
+                    }
+                }
+            });
+
+            bossBullets.forEach((bullet, bIndex) => {
+                if (
+                    bullet.x < spaceship.x + spaceship.width &&
+                    bullet.x + bullet.width > spaceship.x &&
+                    bullet.y < spaceship.y + spaceship.height &&
+                    bullet.y + bullet.height > spaceship.y
+                ) {
+                    bossBullets.splice(bIndex, 1);
+                    if (!spaceship.shieldActive) {
+                        showMessage(`Vesztettél! Pont: ${score}`);
+                        gameRunning = false;
+                        document.getElementById('restartButton').style.display = 'block';
+                    }
+                }
+            });
+
+            enemyRedBullets.forEach((bullet, bIndex) => {
+                if (
+                    bullet.x < spaceship.x + spaceship.width &&
+                    bullet.x + bullet.width > spaceship.x &&
+                    bullet.y < spaceship.y + spaceship.height &&
+                    bullet.y + bullet.height > spaceship.y
+                ) {
+                    enemyRedBullets.splice(bIndex, 1);
+                    if (!spaceship.shieldActive) {
+                        showMessage(`Vesztettél! Pont: ${score}`);
+                        gameRunning = false;
+                        document.getElementById('restartButton').style.display = 'block';
+                    }
+                }
+            });
+
+            if (boss) {
+                bullets.forEach((bullet, bIndex) => {
+                    if (
+                        bullet.x < boss.x + boss.width &&
+                        bullet.x + bullet.width > boss.x &&
+                        bullet.y < boss.y + boss.height &&
+                        bullet.y + bullet.height > boss.y
+                    ) {
+                        boss.health -= spaceship.damageLevel;
+                        bullets.splice(bIndex, 1);
+
+                        if (boss.health <= 0) {
+                            boss = null;
+                            bossSpawned = false;
+                            score += 50;
+                            bossType++;
+
+                            if (bossType > 2) {
+                                showMessage("A Föld megmenekült! Hála neked!!!");
+                                endGame();
+                            } else if (bossType === 1) {
+                                firstBossDefeated = true;
+                            } else {
+                                spawnBoss();
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function endGame() {
+            cancelAnimationFrame(gameLoop);
+            document.getElementById('restartButton').style.display = 'block';
+        }
+
+        function activateShield() {
+            if (!spaceship.shieldActive && !spaceship.shieldCooldown) {
+                spaceship.shieldActive = true;
+                spaceship.shieldCooldown = true;
+
+                setTimeout(() => {
+                    spaceship.shieldActive = false;
+                }, shieldDurations[spaceship.shieldLevel]);
+
+                setTimeout(() => {
+                    spaceship.shieldCooldown = false;
+                }, 60000);
+            }
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (keys.up && spaceship.y > 0) spaceship.y -= spaceship.speed;
+            if (keys.down && spaceship.y < canvas.height - spaceship.height) spaceship.y += spaceship.speed;
+            if (keys.left && spaceship.x > 0) spaceship.x -= spaceship.speed;
+            if (keys.right && spaceship.x < canvas.width - spaceship.width) spaceship.x += spaceship.speed;
+
+            drawSpaceship();
+            drawBullets();
+            drawEnemies();
+            drawBoss();
+
+            updateBullets();
+            updateEnemies();
+            updateBoss();
+            checkCollisions();
+
+            if (score >= 500 && bossType === 0 && !boss && !firstBossDefeated) {
+                spawnBoss();
+            } else if (score >= 1000 && bossType === 1 && !boss) {
+                spawnBoss();
+            } else if (score >= 1500 && bossType === 2 && !boss) {
+                spawnBoss();
+            }
+
+            if (boss) {
+                if (Math.random() < 0.02) {
+                    bossShoot();
+                }
+            }
+
+            ctx.fillStyle = 'white';
+            ctx.fillText(`Pont: ${score}`, 10, 20);
+            ctx.fillText(`Pénz: ${coins}`, 10, 40);
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowUp' || e.key === 'w') keys.up = true;
+            if (e.key === 'ArrowDown' || e.key === 's') keys.down = true;
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
+            if (e.key === ' ') {
+                if (spaceship.canShoot) {
+                    bullets.push({
+                        x: spaceship.x + spaceship.width / 2 - 2.5,
+                        y: spaceship.y,
+                        width: 5,
+                        height: 10,
+                        speed: 10
+                    });
+                    spaceship.canShoot = false;
+                }
+            }
+            if (e.key === 'f') {
+                activateShield();
+            }
+        });
+
+        window.addEventListener('keyup', e => {
+            if (e.key === 'ArrowUp' || e.key === 'w') keys.up = false;
+            if (e.key === 'ArrowDown' || e.key === 's') keys.down = false;
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
+        });
+
+        document.getElementById('restartButton').addEventListener('click', () => {
+            document.location.reload();
+        });
+
+        function updateButtonLabels() {
+            const shieldButton = document.getElementById('upgradeShield');
+            const damageButton = document.getElementById('upgradeDamage');
+
+            let shieldCost = 0;
+            if (spaceship.shieldLevel === 1) shieldCost = 100;
+            else if (spaceship.shieldLevel === 2) shieldCost = 140;
+            else if (spaceship.shieldLevel === 3) shieldCost = 200;
+
+            let damageCost = 0;
+            if (spaceship.damageLevel === 1) damageCost = 100;
+            else if (spaceship.damageLevel === 2) damageCost = 140;
+            else if (spaceship.damageLevel === 3) damageCost = 200;
+
+            shieldButton.innerText = `Pajzs fejlesztése (${shieldCost} pénz)`;
+            damageButton.innerText = `Lövés fejlesztése (${damageCost} pénz)`;
+        }
+
+        document.getElementById('upgradeShield').addEventListener('click', () => {
+            let cost = 0;
+            if (spaceship.shieldLevel === 1) cost = 100;
+            else if (spaceship.shieldLevel === 2) cost = 140;
+            else if (spaceship.shieldLevel === 3) cost = 200;
+
+            if (spaceship.shieldLevel < 3 && coins >= cost) {
+                coins -= cost;
+                spaceship.shieldLevel++;
+                showMessage(`Gratulálok! Pajzs szint: ${spaceship.shieldLevel}`);
+                updateShieldButton();
+                updateButtonLabels();
+            }
+        });
+
+        document.getElementById('upgradeDamage').addEventListener('click', () => {
+            let cost = 0;
+            if (spaceship.damageLevel === 1) cost = 100;
+            else if (spaceship.damageLevel === 2) cost = 140;
+            else if (spaceship.damageLevel === 3) cost = 200;
+
+            if (spaceship.damageLevel < 4 && coins >= cost) {
+                coins -= cost;
+                spaceship.damageLevel++;
+                showMessage(`Gratulálok! Lövés szint: ${spaceship.damageLevel}`);
+                updateDamageButton();
+                updateButtonLabels();
+            }
+        });
+
+        function updateDamageButton() {
+            const damageButton = document.getElementById('upgradeDamage');
+            if (spaceship.damageLevel >= 4) {
+                damageButton.classList.add('disabled');
+                damageButton.disabled = true;
+            }
+        }
+
+        function updateShieldButton() {
+            const shieldButton = document.getElementById('upgradeShield');
+            if (spaceship.shieldLevel >= 3) {
+                shieldButton.classList.add('disabled');
+                shieldButton.disabled = true;
+            }
+        }
+
+        function showMessage(message) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.innerText = message;
+            messageBox.style.display = 'block';
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 3000);
+        }
+
+        setInterval(() => {
+            spaceship.canShoot = true;
+        }, 250);
+
+        let skin1Unlocked = false;
+        let skin2Unlocked = false;
+        let skin1Active = false;
+        let skin2Active = false;
+
+        document.getElementById('buySkin1').addEventListener('click', () => {
+            if (coins >= 1000 && !skin1Unlocked) {
+                coins -= 1000;
+                skin1Unlocked = true;
+                document.getElementById('skin1Status').innerText = "Megvásárolva";
+                document.getElementById('toggleSkin1').style.display = 'block';
+                showMessage("Skin 1000 pénz megvásárolva!");
+            }
+        });
+
+        document.getElementById('toggleSkin1').addEventListener('click', () => {
+            skin1Active = !skin1Active;
+            if (skin1Active) {
+                spaceship.currentSkin = 'spaceship1';
+                document.getElementById('toggleSkin1').innerText = "Levesz";
+                document.getElementById('toggleSkin1').classList.add('active');
+            } else {
+                spaceship.currentSkin = 'spaceship';
+                document.getElementById('toggleSkin1').innerText = "Hozzáad";
+                document.getElementById('toggleSkin1').classList.remove('active');
+            }
+        });
+
+        document.getElementById('buySkin2').addEventListener('click', () => {
+            if (coins >= 2000 && !skin2Unlocked) {
+                coins -= 2000;
+                skin2Unlocked = true;
+                document.getElementById('skin2Status').innerText = "Megvásárolva";
+                document.getElementById('toggleSkin2').style.display = 'block';
+                showMessage("Skin 2000 pénz megvásárolva!");
+            }
+        });
+
+        document.getElementById('toggleSkin2').addEventListener('click', () => {
+            skin2Active = !skin2Active;
+            if (skin2Active) {
+                spaceship.currentSkin = 'hellokitty';
+                document.getElementById('toggleSkin2').innerText = "Levesz";
+                document.getElementById('toggleSkin2').classList.add('active');
+            } else {
+                spaceship.currentSkin = 'spaceship';
+                document.getElementById('toggleSkin2').innerText = "Hozzáad";
+                document.getElementById('toggleSkin2').classList.remove('active');
+            }
+        });
+
+      
+        document.querySelectorAll('.character-select img').forEach(img => {
+            img.addEventListener('click', () => {
+                document.querySelectorAll('.character-select img').forEach(i => i.classList.remove('selected'));
+                img.classList.add('selected');
+                spaceship.currentSkin = img.dataset.skin;
+            });
+        });
+
+       
+        setTimeout(() => {
+            document.getElementById('intro').style.display = 'none';
+        }, 5000);
+
+       
+        let rapidFireActive = false;
+        let extraLifeCount = 0;
+        let homingMissilesActive = false;
+        let shieldBoostActive = false;
+
+        document.getElementById('buyRapidFire').addEventListener('click', () => {
+            if (coins >= 150 && !rapidFireActive) {
+                coins -= 150;
+                rapidFireActive = true;
+                showMessage("Gyors Tűz aktiválva!");
+                setInterval(() => {
+                    spaceship.canShoot = true;
+                }, 100);
+            } else if (coins < 150) {
+                showMessage("Nincs elég pénzed!");
+            }
+        });
+
+        document.getElementById('buyExtraLife').addEventListener('click', () => {
+            if (coins >= 200) {
+                coins -= 200;
+                extraLifeCount++;
+                showMessage("Extra Élet vásárolva!");
+            } else if (coins < 200) {
+                showMessage("Nincs elég pénzed!");
+            }
+        });
+
+        document.getElementById('buyHomingMissiles').addEventListener('click', () => {
+            if (coins >= 300 && !homingMissilesActive) {
+                coins -= 300;
+                homingMissilesActive = true;
+                showMessage("Célkövető Rakéták aktiválva!");
+            } else if (coins < 300) {
+                showMessage("Nincs elég pénzed!");
+            }
+        });
+
+        document.getElementById('buyShieldBoost').addEventListener('click', () => {
+            if (coins >= 250 && !shieldBoostActive) {
+                coins -= 250;
+                shieldBoostActive = true;
+                spaceship.shieldLevel = Math.min(spaceship.shieldLevel + 1, 3);
+                showMessage("Pajzs Erősítés aktiválva!");
+            } else if (coins < 250) {
+                showMessage("Nincs elég pénzed!");
+            }
+        });
+
+        
+        let shopVisible = false;
+        document.getElementById('openShopButton').addEventListener('click', () => {
+            shopVisible = !shopVisible;
+            document.getElementById('shop').classList.toggle('show', shopVisible);
+        });
+        updateButtonLabels();
+        gameLoop();
+    </script>
+</body>
+</html>
