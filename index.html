@@ -328,7 +328,11 @@
         <button id="upgradeDamage">Lövés fejlesztése (20 pénz)</button>
         <button id="closeShop">Bezárás</button>
     </div>
-
+ <div class="character-select">
+     <img src="urhajo1.png" data-skin="urhajo1" class="selected">
+     <img src="urhajo2.png" data-skin="urhajo2">
+     <img src="urhajo3.png" data-skin="urhajo3">
+ </div>
     <div class="shop-arrow" id="shopArrow"></div>
 
     <script>
@@ -363,6 +367,15 @@
 
             images.boss = new Image();
             images.boss.src = 'BOSS.png'; 
+
+             images.urhajo1 = new Image();
+             images.urhajo1.src = 'urhajo1.png';
+
+             images.urhajo2 = new Image();
+             images.urhajo2.src = 'urhajo2.png';
+
+             images.urhajo3 = new Image();
+             images.urhajo3.src = 'urhajo3.png';
         }
 
         loadImages();
