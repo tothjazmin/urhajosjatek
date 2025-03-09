@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,7 @@
             background: radial-gradient(circle, #1a1a1a, #000);
             border: 3px solid cyan;
             box-shadow: 0 0 15px cyan;
+            position: relative; 
         }
 
         .controls {
@@ -39,9 +40,9 @@
             box-shadow: 0 0 10px cyan;
         }
 
-            .controls p {
-                margin: 5px 0;
-            }
+        .controls p {
+            margin: 5px 0;
+        }
 
         button {
             margin: 5px;
@@ -55,10 +56,10 @@
             box-shadow: 0 0 8px rgba(255, 65, 108, 0.8);
         }
 
-            button:hover {
-                background: linear-gradient(90deg, #ff4b2b, #ff416c);
-                box-shadow: 0 0 12px rgba(255, 75, 43, 0.8);
-            }
+        button:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            box-shadow: 0 0 12px rgba(255, 75, 43, 0.8);
+        }
 
         .message {
             position: absolute;
@@ -88,10 +89,10 @@
             box-shadow: 0 0 12px rgba(255, 65, 108, 0.8);
         }
 
-            #restartButton:hover {
-                background: linear-gradient(90deg, #ff4b2b, #ff416c);
-                box-shadow: 0 0 15px rgba(255, 75, 43, 0.8);
-            }
+        #restartButton:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            box-shadow: 0 0 15px rgba(255, 75, 43, 0.8);
+        }
 
         .disabled {
             text-decoration: line-through;
@@ -121,9 +122,9 @@
             cursor: pointer;
         }
 
-            .skin-button:hover {
-                background-color: #555;
-            }
+        .skin-button:hover {
+            background-color: #555;
+        }
 
         .active {
             background-color: green;
@@ -144,129 +145,191 @@
             font-size: 27.9px;
         }
 
-        #intro {
+        .pause-menu {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.8);
-            color: cyan;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            z-index: 100;
-            font-size: 24px;
-            text-shadow: 0 0 10px cyan;
+            box-shadow: 0 0 10px cyan;
+            color: white;
+            display: none; 
         }
 
-        .character-select {
+        .pause-menu button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(255, 65, 108, 0.8);
+        }
+
+        .pause-menu button:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            box-shadow: 0 0 12px rgba(255, 75, 43, 0.8);
+        }
+
+        .shop {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%); 
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px cyan;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+            color: white;
+            display: none; 
         }
 
-            .character-select img {
-                width: 50px;
-                height: 50px;
-                margin: 5px;
-                cursor: pointer;
-                border: 2px solid transparent;
-            }
+        .shop button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(255, 65, 108, 0.8);
+        }
 
-                .character-select img.selected {
-                    border-color: cyan;
-                }
+        .shop button:hover {
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+            box-shadow: 0 0 12px rgba(255, 75, 43, 0.8);
+        }
 
-        #shop {
+        .shop-arrow {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px cyan;
-            display: none;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            display: none; 
+            left: 650px; 
+            top: 50%; 
+            transform: translateY(-50%); 
         }
+        .story-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.499);
+    color: yellow;
+    font-size: 32px;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 10; 
+}
 
-            #shop.show {
-                display: block;
-            }
+.story-text {
+    width: 60%;
+    
+    text-align: center;
+    position: absolute;
+    bottom: -100%;
+    animation: scrollUp 25s linear forwards;
+    line-height: 1.8;
+}
 
-            #shop button {
-                display: block;
-                margin: 5px 0;
-            }
+@keyframes scrollUp {
+    from {
+        bottom: -200%;
+    }
+    to {
+        bottom: 250%;
+    }
+}
 
-        #openShopButton {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 101;
-        }
+#skipButton {
+    position: absolute;
+    bottom: 10%;
+    padding: 10px 20px;
+    background: red;
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: block;
+    z-index: 9;
+}
+
     </style>
 </head>
 <body>
+    <div class="story-container" id="storyContainer">
+        <div class="story-text" id="storyText">
+            <p>A Földünk egy üzenetet kap az űr egyik távoli szegletéből, és elkezdik megfejteni. Múlnak a napok, majd hetek és hónapok.</p> <br>
 
+            <p>Már 11 hónap eltelt az üzenet megkapása óta, és az egész világ azt várja, mikor fejti meg már végre valaki.</p> <br>
+            <p>Egyik nap a tudósok egy csoportja rájön a megfejtésre, és az üzenet a következő:</p> <br>
+            <p>"Emberiség, küldtünk önöknek egy egyszerűen feltörhető kódot az udvariaság kedvéért, és hogy legyen</p> <br>
+            <p>idejük dönteni. Vagy megadják magukat, és csatlakoznak hozzánk, az Ifláp fajhoz, szolgáink lesznek, vagy</p> <br>
+            <p>elpusztítjuk a Földet. 12 földi hónapot adunk a döntésre. Döntsenek belátásuk szerint, és gondolkodjanak a következményeken."</p> <br>
+            <p>A Földön pánik tör ki, és minden katonai intézmény felkészül a támadásra. Hosszú harcok során a Föld</p> <br>
+            <p>szinte elesik, de az eddig titokban fejlesztett Dom űrhajó elkészül.</p> <br>
+            <p>A legképzettebb pilótájukat útnak indítják az űrlények anyahajója felé.</p> <br>
+            <p>Főhősünk búcsút vesz családjától és barátaitól, majd vissza se nézve útnak indul ezen a veszélyes bevetésen.</p> <br>
+        </div>
+        <button id="skipButton">Skip</button>
+    </div>
+    
     <div class="controls-description">
         <h3>Irányítás</h3>
         <p><strong>Felfelé:</strong>(↑) vagy W</p>
         <p><strong>Lefelé:</strong>(↓) vagy S</p>
         <p><strong>Balra:</strong>(←) vagy A</p>
         <p><strong>Jobbra:</strong>(→) vagy D</p>
-        <p><strong>Lövés:</strong> Space</p>
-        <p><strong>Pajzs aktiválása:</strong> F</p>
+        <p><strong>Lövés:</strong>Space</p>
+        <p><strong>Pajzs aktiválása:</strong>F</p>
+        <p><strong>Szünet:</strong>ESC</p>
+        <p><strong>Bolt:</strong>B</p>
     </div>
 
-    <div class="controls">
-        <button id="upgradeShield">Pajzs fejlesztése (20 pénz)</button>
-        <button id="upgradeDamage">Lövés fejlesztése (20 pénz)</button>
-    </div>
     <canvas id="gameCanvas"></canvas>
     <div class="message" id="messageBox"></div>
     <button id="restartButton">Új játék</button>
 
     <div class="skin-container">
         <div class="skin">
-            <h3>Skin 1000 pénz</h3>
+            <h3>Burger Skin</h3>
             <div id="skin1Status">Zárva</div>
-            <button id="buySkin1" class="skin-button">Vásárlás (1000 pénz)</button>
+            <button id="buySkin1" class="skin-button">Vásárlás (200 pénz)</button>
             <button id="toggleSkin1" class="skin-button" style="display:none;">Hozzáad</button>
         </div>
         <div class="skin">
-            <h3>Skin 2000 pénz</h3>
+            <h3>Hello Kitty Skin</h3>
             <div id="skin2Status">Zárva</div>
-            <button id="buySkin2" class="skin-button">Vásárlás (2000 pénz)</button>
+            <button id="buySkin2" class="skin-button">Vásárlás (300 pénz)</button>
             <button id="toggleSkin2" class="skin-button" style="display:none;">Hozzáad</button>
         </div>
     </div>
 
-    <div id="intro">
-        <h1>Üdvözöllek a Space-Shippers játékban!</h1>
-        <p>A Kryll invázió a Földet fenyegeti. Válassz űrhajót, fejleszd, és mentsd meg a bolygót!.</p>
+    <div class="pause-menu" id="pauseMenu">
+        <h2>Szünet</h2>
     </div>
 
-    <div class="character-select">
-        <img src="urhajo1.png" data-skin="urhajo1" class="selected">
-        <img src="urhajo2.png" data-skin="urhajo2">
-        <img src="urhajo3.png" data-skin="urhajo3">
+    <div class="shop" id="shop">
+        <h2>Bolt</h2>
+        <button id="upgradeShield">Pajzs fejlesztése (20 pénz)</button>
+        <button id="upgradeDamage">Lövés fejlesztése (20 pénz)</button>
+        <button id="closeShop">Bezárás</button>
     </div>
 
-    <button id="openShopButton">Bolt</button>
-
-    <div id="shop">
-        <button id="buyRapidFire">Gyors Tűz (150 pénz)</button>
-        <button id="buyExtraLife">Extra Élet (200 pénz)</button>
-        <button id="buyHomingMissiles">Célkövető Rakéták (300 pénz)</button>
-        <button id="buyShieldBoost">Pajzs Erősítés (250 pénz)</button>
-    </div>
+    <div class="shop-arrow" id="shopArrow"></div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
@@ -299,16 +362,7 @@
             images.enemyPurple.src = 'enemy_purple.png';
 
             images.boss = new Image();
-            images.boss.src = 'BOSS.png';
-
-            images.urhajo1 = new Image();
-            images.urhajo1.src = 'urhajo1.png';
-
-            images.urhajo2 = new Image();
-            images.urhajo2.src = 'urhajo2.png';
-
-            images.urhajo3 = new Image();
-            images.urhajo3.src = 'urhajo3.png';
+            images.boss.src = 'BOSS.png'; 
         }
 
         loadImages();
@@ -324,7 +378,7 @@
             damageLevel: 1,
             shieldCooldown: false,
             canShoot: true,
-            currentSkin: 'urhajo1'
+            currentSkin: 'spaceship' 
         };
 
         let bullets = [];
@@ -333,17 +387,17 @@
         let bossBullets = [];
         let enemyRedBullets = [];
         let enemyTypes = [
-            { image: 'enemyRed', speed: 2, health: 1, reward: 5 },
-            { image: 'enemyBlue', speed: 3, health: 2, reward: 7 },
-            { image: 'enemyGreen', speed: 1.5, health: 3, reward: 9 },
-            { image: 'enemyPurple', speed: 4, health: 4, reward: 12 }
+            { image: 'enemyRed', speed: 2, health: 1, reward: 10 },
+            { image: 'enemyBlue', speed: 3, health: 2, reward: 15 },
+            { image: 'enemyGreen', speed: 1.5, health: 3, reward: 20 },
+            { image: 'enemyPurple', speed: 4, health: 4, reward: 25 }
         ];
         let lastEnemySpawn = 0;
         let enemySpawnInterval = 1500;
         let score = 0;
         let coins = 0;
 
-        const shieldDurations = [0, 5000, 10000, 30000];
+        const shieldDurations = [0, 5000, 10000, 30000]; 
 
         const keys = {
             up: false,
@@ -353,14 +407,18 @@
             shoot: false
         };
 
-        let bossSpawned = false;
-        let bossType = 0;
-        let firstBossDefeated = false;
-        let gameRunning = true;
+        let bossSpawned = false; 
+        let bossType = 0; 
+        let firstBossDefeated = false; 
+        let gameRunning = false;
+        let isPaused = false; 
+        let inShop = false; 
+        let shopArrowVisible = false; 
+        let shopAvailable = true; 
 
         function drawSpaceship() {
             ctx.drawImage(images[spaceship.currentSkin], spaceship.x, spaceship.y, spaceship.width, spaceship.height);
-
+            
             if (spaceship.shieldActive) {
                 ctx.beginPath();
                 ctx.arc(
@@ -378,21 +436,21 @@
 
         function getBulletColor(level) {
             switch (level) {
-                case 1: return 'yellow';
-                case 2: return 'purple';
-                case 3: return 'green';
-                case 4: return 'red';
+                case 1: return 'yellow'; 
+                case 2: return 'purple'; 
+                case 3: return 'green';  
+                case 4: return 'red';   
                 default: return 'yellow';
             }
         }
 
         function drawBullets() {
             bullets.forEach(bullet => {
-                ctx.fillStyle = getBulletColor(spaceship.damageLevel);
+                ctx.fillStyle = getBulletColor(spaceship.damageLevel); 
                 ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
             });
             bossBullets.forEach(bullet => {
-                ctx.fillStyle = 'red';
+                ctx.fillStyle = 'red'; 
                 ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
             });
             enemyRedBullets.forEach(bullet => {
@@ -409,11 +467,21 @@
 
         function drawBoss() {
             if (boss) {
-                ctx.drawImage(images.boss, boss.x, boss.y, boss.width, boss.height);
+                ctx.drawImage(images.boss, boss.x, boss.y, boss.width, boss.height); 
                 ctx.fillStyle = 'white';
-                ctx.fillText(`HP: ${boss.health}`, boss.x, boss.y - 5);
+                ctx.fillText(`HP: ${boss.health}`, boss.x, boss.y - 5); 
             }
         }
+
+        function drawShopArrow() {
+    const shopArrow = document.getElementById('shopArrow');
+    if (shopArrowVisible) {
+        shopArrow.style.display = 'block';
+    } else {
+        shopArrow.style.display = 'none';
+    }
+}
+
 
         function updateBullets() {
             bullets.forEach((bullet, index) => {
@@ -424,24 +492,24 @@
             });
 
             bossBullets.forEach((bullet, index) => {
-                bullet.y += bullet.speed;
+                bullet.y += bullet.speed; 
                 if (bullet.y > canvas.height) {
                     bossBullets.splice(index, 1);
                 }
             });
 
             enemyRedBullets.forEach((bullet, index) => {
-                bullet.y += bullet.speed;
+                bullet.y += bullet.speed; 
                 if (bullet.y > canvas.height) {
-                    enemyRedBullets.splice(index, 1);
+                    enemyRedBullets.splice(index, 1); 
                 }
             });
         }
 
         function enemyRedShoot(enemy) {
             enemyRedBullets.push({
-                x: enemy.x + 12.5,
-                y: enemy.y + 30,
+                x: enemy.x + 12.5, 
+                y: enemy.y + 30, 
                 width: 5,
                 height: 10,
                 speed: 5
@@ -469,7 +537,7 @@
                 enemy.y += enemy.speedY;
                 if (enemy.x < 0 || enemy.x > canvas.width - 30) enemy.speedX *= -1;
                 if (enemy.y > canvas.height) enemies.splice(index, 1);
-
+                
                 if (enemy.image === 'enemyRed' && Date.now() % 2000 < 50) {
                     enemyRedShoot(enemy);
                 }
@@ -477,15 +545,15 @@
         }
 
         function spawnBoss() {
-            if (bossSpawned) return;
+            if (bossSpawned) return; 
 
             let bossHealth;
             if (bossType === 0) {
-                bossHealth = 200;
+                bossHealth = 200; 
             } else if (bossType === 1) {
-                bossHealth = 400;
+                bossHealth = 400; 
             } else if (bossType === 2) {
-                bossHealth = 600;
+                bossHealth = 600; 
             }
 
             boss = {
@@ -494,17 +562,17 @@
                 width: 100,
                 height: 100,
                 health: bossHealth,
-                speed: 2
+                speed: 2 
             };
 
-            bossSpawned = true;
+            bossSpawned = true; 
         }
 
         function updateBoss() {
             if (boss) {
                 boss.x += boss.speed;
                 if (boss.x <= 0 || boss.x >= canvas.width - boss.width) {
-                    boss.speed *= -1;
+                    boss.speed *= -1; 
                 }
             }
         }
@@ -549,9 +617,9 @@
                 ) {
                     enemies.splice(eIndex, 1);
                     if (!spaceship.shieldActive) {
-                        showMessage(`Vesztettél! Pont: ${score}`);
+                        showMessage(`Game Over! Pont: ${score}`);
                         gameRunning = false;
-                        document.getElementById('restartButton').style.display = 'block';
+                        document.getElementById('restartButton').style.display = 'block'; 
                     }
                 }
             });
@@ -565,8 +633,8 @@
                 ) {
                     bossBullets.splice(bIndex, 1);
                     if (!spaceship.shieldActive) {
-                        showMessage(`Vesztettél! Pont: ${score}`);
-                        gameRunning = false;
+                        showMessage(`Game Over! Pont: ${score}`);
+                        gameRunning = false; 
                         document.getElementById('restartButton').style.display = 'block';
                     }
                 }
@@ -581,9 +649,9 @@
                 ) {
                     enemyRedBullets.splice(bIndex, 1);
                     if (!spaceship.shieldActive) {
-                        showMessage(`Vesztettél! Pont: ${score}`);
-                        gameRunning = false;
-                        document.getElementById('restartButton').style.display = 'block';
+                        showMessage(`Game Over! Pont: ${score}`);
+                        gameRunning = false; 
+                        document.getElementById('restartButton').style.display = 'block'; 
                     }
                 }
             });
@@ -600,16 +668,16 @@
                         bullets.splice(bIndex, 1);
 
                         if (boss.health <= 0) {
-                            boss = null;
-                            bossSpawned = false;
-                            score += 50;
-                            bossType++;
+                            boss = null; 
+                            bossSpawned = false; 
+                            score += 50; 
+                            bossType++; 
 
                             if (bossType > 2) {
                                 showMessage("A Föld megmenekült! Hála neked!!!");
-                                endGame();
+                                endGame(); 
                             } else if (bossType === 1) {
-                                firstBossDefeated = true;
+                                firstBossDefeated = true; 
                             } else {
                                 spawnBoss();
                             }
@@ -617,11 +685,30 @@
                     }
                 });
             }
+
+         
+            const arrowRect = {
+                x: 10, 
+                y: canvas.height / 2 - 15, 
+                width: 30,
+                height: 30
+            };
+
+            if (
+                spaceship.x < arrowRect.x + arrowRect.width &&
+                spaceship.x + spaceship.width > arrowRect.x &&
+                spaceship.y < arrowRect.y + arrowRect.height &&
+                spaceship.y + spaceship.height > arrowRect.y
+            ) {
+                if (shopAvailable) {
+                    openShop(); 
+                }
+            }
         }
 
         function endGame() {
-            cancelAnimationFrame(gameLoop);
-            document.getElementById('restartButton').style.display = 'block';
+            cancelAnimationFrame(gameLoop); 
+            document.getElementById('restartButton').style.display = 'block'; 
         }
 
         function activateShield() {
@@ -635,13 +722,12 @@
 
                 setTimeout(() => {
                     spaceship.shieldCooldown = false;
-                }, 60000);
+                }, 60000); 
             }
         }
 
         function gameLoop() {
-            if (!gameRunning) return;
-
+            if (!gameRunning || isPaused || inShop) return; 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (keys.up && spaceship.y > 0) spaceship.y -= spaceship.speed;
@@ -653,10 +739,11 @@
             drawBullets();
             drawEnemies();
             drawBoss();
+            drawShopArrow(); 
 
             updateBullets();
             updateEnemies();
-            updateBoss();
+            updateBoss(); 
             checkCollisions();
 
             if (score >= 500 && bossType === 0 && !boss && !firstBossDefeated) {
@@ -668,7 +755,7 @@
             }
 
             if (boss) {
-                if (Math.random() < 0.02) {
+                if (Math.random() < 0.02) { 
                     bossShoot();
                 }
             }
@@ -694,11 +781,14 @@
                         height: 10,
                         speed: 10
                     });
-                    spaceship.canShoot = false;
+                    spaceship.canShoot = false; 
                 }
             }
             if (e.key === 'f') {
                 activateShield();
+            }
+            if (e.key === 'Escape') { 
+                togglePause();
             }
         });
 
@@ -713,6 +803,50 @@
             document.location.reload();
         });
 
+        function togglePause() {
+            isPaused = !isPaused; 
+            const pauseMenu = document.getElementById('pauseMenu');
+            if (isPaused) {
+                pauseMenu.style.display = 'block'; 
+            } else {
+                pauseMenu.style.display = 'none'; 
+                gameLoop();
+            }
+        }
+
+        function openShop() {
+    if (!shopArrowVisible) return;
+    
+    inShop = true;
+    gameRunning = false;
+    shopAvailable = false; 
+    shopArrowVisible = false;
+    document.getElementById('shop').style.display = 'block';
+    drawShopArrow();
+}
+
+
+
+document.getElementById('closeShop').addEventListener('click', () => {
+    inShop = false;
+    document.getElementById('shop').style.display = 'none';
+    gameRunning = true;
+
+    shopAvailable = false; 
+    shopArrowVisible = false;
+    drawShopArrow(); 
+
+   
+    setTimeout(() => {
+        shopAvailable = true;
+        shopArrowVisible = true; 
+        drawShopArrow();
+    }, 30000); 
+    gameLoop(); 
+});
+
+            
+       
         function updateButtonLabels() {
             const shieldButton = document.getElementById('upgradeShield');
             const damageButton = document.getElementById('upgradeDamage');
@@ -737,12 +871,12 @@
             else if (spaceship.shieldLevel === 2) cost = 140;
             else if (spaceship.shieldLevel === 3) cost = 200;
 
-            if (spaceship.shieldLevel < 3 && coins >= cost) {
+            if (spaceship.shieldLevel < 3 && coins >= cost) { 
                 coins -= cost;
                 spaceship.shieldLevel++;
                 showMessage(`Gratulálok! Pajzs szint: ${spaceship.shieldLevel}`);
-                updateShieldButton();
-                updateButtonLabels();
+                updateShieldButton(); 
+                updateButtonLabels(); 
             }
         });
 
@@ -756,8 +890,8 @@
                 coins -= cost;
                 spaceship.damageLevel++;
                 showMessage(`Gratulálok! Lövés szint: ${spaceship.damageLevel}`);
-                updateDamageButton();
-                updateButtonLabels();
+                updateDamageButton(); 
+                updateButtonLabels(); 
             }
         });
 
@@ -765,7 +899,7 @@
             const damageButton = document.getElementById('upgradeDamage');
             if (spaceship.damageLevel >= 4) {
                 damageButton.classList.add('disabled');
-                damageButton.disabled = true;
+                damageButton.disabled = true; 
             }
         }
 
@@ -773,7 +907,7 @@
             const shieldButton = document.getElementById('upgradeShield');
             if (spaceship.shieldLevel >= 3) {
                 shieldButton.classList.add('disabled');
-                shieldButton.disabled = true;
+                shieldButton.disabled = true; 
             }
         }
 
@@ -783,12 +917,12 @@
             messageBox.style.display = 'block';
             setTimeout(() => {
                 messageBox.style.display = 'none';
-            }, 3000);
+            }, 3000); 
         }
 
         setInterval(() => {
-            spaceship.canShoot = true;
-        }, 250);
+            spaceship.canShoot = true; 
+        }, 250); 
 
         let skin1Unlocked = false;
         let skin2Unlocked = false;
@@ -796,12 +930,12 @@
         let skin2Active = false;
 
         document.getElementById('buySkin1').addEventListener('click', () => {
-            if (coins >= 1000 && !skin1Unlocked) {
-                coins -= 1000;
+            if (coins >= 200 && !skin1Unlocked) {
+                coins -= 200;
                 skin1Unlocked = true;
                 document.getElementById('skin1Status').innerText = "Megvásárolva";
                 document.getElementById('toggleSkin1').style.display = 'block';
-                showMessage("Skin 1000 pénz megvásárolva!");
+                showMessage("Skin 200 pénz megvásárolva!");
             }
         });
 
@@ -819,12 +953,12 @@
         });
 
         document.getElementById('buySkin2').addEventListener('click', () => {
-            if (coins >= 2000 && !skin2Unlocked) {
-                coins -= 2000;
+            if (coins >= 300 && !skin2Unlocked) {
+                coins -= 300;
                 skin2Unlocked = true;
                 document.getElementById('skin2Status').innerText = "Megvásárolva";
                 document.getElementById('toggleSkin2').style.display = 'block';
-                showMessage("Skin 2000 pénz megvásárolva!");
+                showMessage("Skin 300 pénz megvásárolva!");
             }
         });
 
@@ -841,78 +975,40 @@
             }
         });
 
-      
-        document.querySelectorAll('.character-select img').forEach(img => {
-            img.addEventListener('click', () => {
-                document.querySelectorAll('.character-select img').forEach(i => i.classList.remove('selected'));
-                img.classList.add('selected');
-                spaceship.currentSkin = img.dataset.skin;
-            });
-        });
-
-       
-        setTimeout(() => {
-            document.getElementById('intro').style.display = 'none';
-        }, 5000);
-
-       
-        let rapidFireActive = false;
-        let extraLifeCount = 0;
-        let homingMissilesActive = false;
-        let shieldBoostActive = false;
-
-        document.getElementById('buyRapidFire').addEventListener('click', () => {
-            if (coins >= 150 && !rapidFireActive) {
-                coins -= 150;
-                rapidFireActive = true;
-                showMessage("Gyors Tűz aktiválva!");
-                setInterval(() => {
-                    spaceship.canShoot = true;
-                }, 100);
-            } else if (coins < 150) {
-                showMessage("Nincs elég pénzed!");
-            }
-        });
-
-        document.getElementById('buyExtraLife').addEventListener('click', () => {
-            if (coins >= 200) {
-                coins -= 200;
-                extraLifeCount++;
-                showMessage("Extra Élet vásárolva!");
-            } else if (coins < 200) {
-                showMessage("Nincs elég pénzed!");
-            }
-        });
-
-        document.getElementById('buyHomingMissiles').addEventListener('click', () => {
-            if (coins >= 300 && !homingMissilesActive) {
-                coins -= 300;
-                homingMissilesActive = true;
-                showMessage("Célkövető Rakéták aktiválva!");
-            } else if (coins < 300) {
-                showMessage("Nincs elég pénzed!");
-            }
-        });
-
-        document.getElementById('buyShieldBoost').addEventListener('click', () => {
-            if (coins >= 250 && !shieldBoostActive) {
-                coins -= 250;
-                shieldBoostActive = true;
-                spaceship.shieldLevel = Math.min(spaceship.shieldLevel + 1, 3);
-                showMessage("Pajzs Erősítés aktiválva!");
-            } else if (coins < 250) {
-                showMessage("Nincs elég pénzed!");
-            }
-        });
-
-        
-        let shopVisible = false;
-        document.getElementById('openShopButton').addEventListener('click', () => {
-            shopVisible = !shopVisible;
-            document.getElementById('shop').classList.toggle('show', shopVisible);
-        });
         updateButtonLabels();
         gameLoop();
+
+        setTimeout(() => {
+            if (!inShop) { 
+                shopArrowVisible = true; 
+                drawShopArrow(); 
+            }
+        }, 30000);
+        function showStory() {
+    const storyContainer = document.getElementById('storyContainer');
+    const shop = document.getElementById('shop');
+
+    gameRunning = false;
+    inShop = false;  
+    shop.style.display = 'none'; 
+
+    storyContainer.style.display = 'flex';
+
+    setTimeout(() => {
+        storyContainer.style.display = 'none';
+        gameRunning = true; 
+        gameLoop();
+    }, 15000); 
+}
+
+document.getElementById('skipButton').addEventListener('click', () => {
+    document.getElementById('storyContainer').style.display = 'none';
+    gameRunning = true; 
+    gameLoop();
+});
+
+window.onload = showStory;
+
     </script>
 </body>
 </html>
